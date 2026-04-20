@@ -1,0 +1,22 @@
+export const enum PlayerAnimMap {
+  Default = 'Default',
+  HurricaneKick = 'Hurricane Kick',
+  Idle = 'Idle',
+  LeftStrafe = 'Left Strafe',
+  LeftStrafeWalking = 'Left Strafe Walking',
+  RifleFiring = 'Rifle Firing',
+  RifleIdle = 'Rifle Idle',
+  RifleRun = 'Rifle Run',
+  RifleRunBackward = 'Rifle Run Backward',
+  RifleRunBackwardLeft = 'Rifle Run Backward Left',
+  RifleRunBackwardRight = 'Rifle Run Backward Right',
+  RifleRunForwardLeft = 'Rifle Run Forward Left',
+  RifleRunForwardRight = 'Rifle Run Forward Right',
+  RifleRunLeft = 'Rifle Run Left',
+  RifleRunRight = 'Rifle Run Right',
+  RightStrafe = 'Right Strafe',
+  RightStrafeWalking = 'Right Strafe Walking',
+  Running = 'Running',
+  Sprint = 'Sprint',
+  StandardWalk = 'Standard Walk'
+}
