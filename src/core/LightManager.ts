@@ -15,7 +15,7 @@ class LightManager {
     const scene = Main.getScene()
     const directionalLight = new DirectionalLight('DirectionalLight', new Vector3(1, -2, 1), scene)
     directionalLight.position = new Vector3(-200, 200, -200)
-    directionalLight.intensity = 2
+    directionalLight.intensity = 1
     return directionalLight
   }
 

@@ -106,9 +106,9 @@ class Player {
   registerRenderObserver() {
     const scene = Main.getScene()
 
-    scene.onBeforePhysicsObservable.add(() => {
-      this.openFire(scene)
-    })
+    // scene.onBeforePhysicsObservable.add(() => {
+    //   this.openFire(scene)
+    // })
 
     scene.onBeforeRenderObservable.add(() => {
 
@@ -116,7 +116,7 @@ class Player {
 
       const { x, y, z } = this.playerController.getPosition()
       this.playerNode.position.copyFromFloats(x, y - CAPSULE_HEIGHT / 2, z)
-      
+
       this.updateLaserVertex(scene)
     })
 
@@ -124,10 +124,6 @@ class Player {
       const { repeat } = (e.event as KeyboardEvent)
       if (e.event.code === KeyCode.F && !repeat) {
         this.flashLight.intensity = this.flashLight.intensity ? 0 : FLASHLIGHT_INTENSITY
-      }
-      if (e.event.code === KeyCode.SPACE && !repeat) {
-        const support = this.playerController.checkSupport(0.01, Vector3.Up());
-        this.playerController.integrate(10, support, GRAVITY)
       }
     }, KeyboardEventTypes.KEYDOWN)
   }
@@ -143,10 +139,10 @@ class Player {
 
   movePlayer(scene: Scene, deltaTime: number) {
     if (scene.activeCamera instanceof FlyCamera) return
-    this.onFpCameraMovePlayer(scene.activeCamera as UniversalCamera | ArcRotateCamera, deltaTime)
+    this.onCameraMovePlayer(scene.activeCamera as UniversalCamera | ArcRotateCamera, deltaTime)
   }
 
-  onFpCameraMovePlayer(camera: UniversalCamera | ArcRotateCamera, deltaTime: number) {
+  onCameraMovePlayer(camera: UniversalCamera | ArcRotateCamera, deltaTime: number) {
 
     const keyState = InputManager.getKeyState()
 
