@@ -40,7 +40,6 @@ class CameraManager {
     tpCamera.inertia = 0
     tpCamera.checkCollisions = true
     tpCamera.minZ = NEAR_PLANE
-    tpCamera.layerMask = 0b011
 
     const flyCamera = new FlyCamera(EntityMap.FlyCamera, new Vector3(0, 5, -10), scene)
     flyCamera.speed = 0.5
@@ -53,6 +52,7 @@ class CameraManager {
     fpCamera.attachControl(true)
     fpCamera.minZ = NEAR_PLANE
     fpCamera.layerMask = 1
+
 
     return {
       fpCamera,

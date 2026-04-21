@@ -3,25 +3,19 @@ import {
   ArcRotateCamera,
   Axis,
   Color3,
-  CreateSoundAsync,
   FlyCamera,
   ImportMeshAsync,
   KeyboardEventTypes,
   Light,
   LinesMesh,
   MeshBuilder,
-  PerformanceMonitor,
   PhysicsAggregate,
   PhysicsCharacterController,
   PhysicsShapeType,
-  Quaternion,
-  RandomRange,
-  Scene,
+  Quaternion, Scene,
   Space,
   SpotLight,
-  StandardMaterial,
-  StaticSound,
-  Tools,
+  StandardMaterial, Tools,
   TransformNode,
   UniversalCamera,
   Vector3,
@@ -32,7 +26,7 @@ import {
 import { EntityMap, Path } from '../config/option'
 import { BulletEmissiveColor, FlashLightColor, RedColor4, YellowColor4 } from '../config/color'
 import { getPhysicsBodyFromNode, getYawFromXZ, rotateAroundY, throttle } from '../utils/tools'
-import { BULLET_VELOCITY, DirectionVec, FLASHLIGHT_INTENSITY, GRAVITY, MOVE_SPEED, PLAYER_SELF_LAYER, ZeroVector3 } from '../config'
+import { BULLET_VELOCITY, DirectionVec, FLASHLIGHT_INTENSITY, MOVE_SPEED, PLAYER_SELF_LAYER, ZeroVector3 } from '../config'
 import { KeyCode } from '../config/keyboard'
 import { PlayerAnimMap } from '../config/animation'
 import Main from '../core/Main'
@@ -75,6 +69,8 @@ class Player {
   pickedMesh: Nullable<AbstractMesh> = null
 
   bulletNode = new TransformNode('BulletNode')
+
+  testSphere = MeshBuilder.CreateSphere('TestSphere', { diameter: 0.05 }, Main.getScene())
 
   constructor() {
 
@@ -305,6 +301,9 @@ class Player {
     const ray = scene.activeCamera!.getForwardRay(1000)
 
     const origin = this.laserAnchorNode.getAbsolutePosition()
+
+    // test sphere
+    this.testSphere.position.copyFrom(origin)
 
     const hit = scene.pickWithRay(ray)!
 
