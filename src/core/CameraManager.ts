@@ -40,6 +40,7 @@ class CameraManager {
     tpCamera.inertia = 0
     tpCamera.checkCollisions = true
     tpCamera.minZ = NEAR_PLANE
+    tpCamera.layerMask = 0b011
 
     const flyCamera = new FlyCamera(EntityMap.FlyCamera, new Vector3(0, 5, -10), scene)
     flyCamera.speed = 0.5
@@ -64,10 +65,8 @@ class CameraManager {
     const scene = Main.getScene()
     const cameraAnchorNode = Player.getCameraAnchorNode()
 
-    scene.onBeforeCameraRenderObservable.add((camera) => {
-      if (camera instanceof UniversalCamera) {
-        camera.position.copyFrom(cameraAnchorNode.absolutePosition)
-      }
+    scene.onBeforeRenderObservable.add(() => {
+      this.fpCamera.position.copyFrom(cameraAnchorNode.absolutePosition)
     })
   }
 

@@ -6,17 +6,15 @@ import { Path } from '../config/option'
 import { BumpLevel, SpecularPower } from '../config'
 import Main from '../core/Main'
 import Player from '../entities/Player'
-import LightManager from './LightManager'
 
 class WorldScene {
 
-  private static instance: WorldScene
-
   constructor() {
-    WorldScene.instance = this
+
     this.createGround()
-    this.createShadowGenerator()
+
     new Player()
+    
   }
 
   createGround() {
@@ -43,14 +41,6 @@ class WorldScene {
     new PhysicsAggregate(ground, PhysicsShapeType.BOX, { mass: 0 }, scene)
   }
 
-
-  createShadowGenerator() {
-    const light = LightManager.getDirectionalLight()
-
-    // BUG!!!
-    // const shadowGenerator = new ShadowGenerator(1024, light)
-
-  }
 }
 
 export default WorldScene

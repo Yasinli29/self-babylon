@@ -4,6 +4,7 @@ import {
   Axis,
   Color3,
   CreateSoundAsync,
+  FlyCamera,
   ImportMeshAsync,
   KeyboardEventTypes,
   Light,
@@ -105,18 +106,18 @@ class Player {
   registerRenderObserver() {
     const scene = Main.getScene()
 
-    scene.onBeforeCameraRenderObservable.add(() => {
-      this.updateLaserVertex(scene)
-    })
-
-    scene.onBeforePhysicsObservable.add(({ deltaTime }) => {
-      this.movePlayer(scene, deltaTime / 1000)
+    scene.onBeforePhysicsObservable.add(() => {
       this.openFire(scene)
     })
 
     scene.onBeforeRenderObservable.add(() => {
+
+      this.movePlayer(scene, scene.getEngine().getDeltaTime() / 1000)
+
       const { x, y, z } = this.playerController.getPosition()
       this.playerNode.position.copyFromFloats(x, y - CAPSULE_HEIGHT / 2, z)
+      
+      this.updateLaserVertex(scene)
     })
 
     scene.onKeyboardObservable.add((e) => {
@@ -141,10 +142,11 @@ class Player {
   }
 
   movePlayer(scene: Scene, deltaTime: number) {
-    this.onFpCameraMovePlayer(scene.activeCamera as UniversalCamera, deltaTime)
+    if (scene.activeCamera instanceof FlyCamera) return
+    this.onFpCameraMovePlayer(scene.activeCamera as UniversalCamera | ArcRotateCamera, deltaTime)
   }
 
-  onFpCameraMovePlayer(camera: UniversalCamera, deltaTime: number) {
+  onFpCameraMovePlayer(camera: UniversalCamera | ArcRotateCamera, deltaTime: number) {
 
     const keyState = InputManager.getKeyState()
 
@@ -179,38 +181,6 @@ class Player {
       return PlayerAnimMap.RifleIdle
     })()
     this.animator.play(animName)
-  }
-
-  onTpCameraMovePlayer(camera: ArcRotateCamera, deltaTime: number) {
-
-    const keyState = InputManager.getKeyState()
-
-    const { keyDirection } = this
-
-    keyDirection.x = ~~keyState[KeyCode.D] - ~~keyState[KeyCode.A]
-    keyDirection.z = ~~keyState[KeyCode.W] - ~~keyState[KeyCode.S]
-
-    if (keyDirection.length()) {
-      // 相机rad + 控制rad = 人物rad
-      const rad = getYawFromXZ(camera.getForwardRay().direction) + getYawFromXZ(keyDirection)
-
-      const deltaDistance = deltaTime * MOVE_SPEED * (keyState[KeyCode.L_SHIFT] ? 2 : 1)
-
-      this.playerNode.physicsBody!.setTargetTransform(
-        this.playerNode.position.add(this.playerNode.forward.scale(deltaDistance)),
-        Quaternion.Slerp(this.playerNode.rotationQuaternion!, Quaternion.FromEulerAngles(0, rad, 0), 0.2)
-      )
-
-      // 设置动画
-      this.animator.play(PlayerAnimMap.Running)
-      this.animator.setSpeedRatio(keyState[KeyCode.L_SHIFT] ? 1.5 : 1)
-    } else {
-      this.playerNode.physicsBody!.setTargetTransform(this.playerNode.position, this.playerNode.rotationQuaternion!)
-
-      // 设置动画
-      this.animator.play(PlayerAnimMap.Idle)
-      this.animator.setSpeedRatio(1)
-    }
   }
 
   async loadModel() {
